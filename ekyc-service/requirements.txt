@@ -7,6 +7,7 @@ ecdsa==0.19.1
 fastapi==0.115.12
 h11==0.16.0
 idna==3.10
+motor==3.4.0
 numpy==2.2.6
 passlib==1.7.4
 pyasn1==0.6.1
@@ -22,3 +23,4 @@ starlette==0.46.2
 typing-inspection==0.4.1
 typing_extensions==4.13.2
 uvicorn==0.34.2
+PyJWT==2.8.0
