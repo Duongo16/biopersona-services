@@ -10,7 +10,7 @@ idna==3.10
 numpy==2.2.6
 passlib==1.7.4
 pyasn1==0.6.1
-pydantic==2.11.5
+pydantic[email]==2.11.5
 pydantic_core==2.33.2
 python-jose==3.5.0
 python-multipart==0.0.20
