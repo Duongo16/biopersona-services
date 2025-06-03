@@ -32,7 +32,8 @@ async def login_user(data: LoginRequest):
         key="token",
         value=token,
         httponly=True,
-        secure=False,  # đổi True nếu dùng HTTPS
+        secure=True,  # đổi True nếu dùng HTTPS
+        samesite="none",
         max_age=int(token_exp.total_seconds()),
         path="/"
     )
