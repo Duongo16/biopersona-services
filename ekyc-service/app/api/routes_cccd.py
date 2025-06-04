@@ -1,6 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Request, HTTPException, Depends
 from app.services.cccd_service import get_user_cccd_info, process_cccd_register
 from typing import Dict
+from app.utils.token import get_token_from_header
 
 router = APIRouter()
 
@@ -10,7 +11,7 @@ async def cccd_register(
     idFront: UploadFile = File(...),
     idBack: UploadFile = File(...)
 ) -> Dict:
-    token = request.cookies.get("token")
+    token = get_token_from_header(request)
     if not token:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
@@ -18,7 +19,7 @@ async def cccd_register(
 
 @router.get("/cccd-info")
 async def cccd_info(request: Request):
-    token = request.cookies.get("token")
+    token = get_token_from_header(request)
     if not token:
         raise HTTPException(status_code=401, detail="Unauthorized")
 

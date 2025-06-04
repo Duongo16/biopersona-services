@@ -27,7 +27,7 @@ async def login_user(data: LoginRequest):
     token_exp = timedelta(days=7) if data.rememberMe else timedelta(hours=1)
     token = create_jwt_token(user, token_exp)
 
-    response = JSONResponse(content={"message": "Đăng nhập thành công"})
+    response = JSONResponse(content={"message": "Đăng nhập thành công","token": token})
     response.set_cookie(
         key="token",
         value=token,
