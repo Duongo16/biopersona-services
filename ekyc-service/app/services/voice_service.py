@@ -75,7 +75,14 @@ async def process_voice_verify(user_id: str, file: UploadFile):
 
         convert_webm_to_wav(original, converted)
 
-        waveform, _ = torchaudio.load(converted)
+        if not os.path.exists(converted):
+            raise HTTPException(status_code=500, detail="File WAV không tồn tại.")
+
+        try:
+            waveform, _ = torchaudio.load(converted)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Lỗi đọc WAV: {str(e)}")
+        
         new_vector = verifier.encode_batch(waveform).squeeze().detach().numpy()
 
         user = await usercccds_collection.find_one({"userId": user_id})
