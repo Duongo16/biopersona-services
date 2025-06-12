@@ -12,6 +12,9 @@ from app.config import JWT_SECRET
 from app.models.user import UpdateUserRequest
 from bson import ObjectId
 
+from fastapi import HTTPException
+from fastapi.responses import JSONResponse
+from datetime import timedelta
 
 async def login_user(data: LoginRequest):
     user = await get_user_by_email(data.email)
@@ -27,17 +30,25 @@ async def login_user(data: LoginRequest):
     token_exp = timedelta(days=7) if data.rememberMe else timedelta(hours=1)
     token = create_jwt_token(user, token_exp)
 
-    response = JSONResponse(content={"message": "Đăng nhập thành công","token": token})
+    response = JSONResponse(content={
+        "message": "Đăng nhập thành công",
+        "token": token,
+        "token_type": "bearer",
+        "expires_in": int(token_exp.total_seconds())
+    })
+
     response.set_cookie(
         key="token",
         value=token,
         httponly=True,
-        secure=True,  # đổi True nếu dùng HTTPS
-        samesite="none",
+        secure=True,        # Đặt False nếu đang dev ở localhost
+        samesite="none",    # Đặt "lax" nếu không dùng cross-origin
         max_age=int(token_exp.total_seconds()),
         path="/"
     )
+
     return response
+
 
 async def register_business_user(data: BusinessRegisterRequest):
     # Kiểm tra email tồn tại
